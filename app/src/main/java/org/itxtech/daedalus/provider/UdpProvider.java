@@ -9,10 +9,13 @@ import android.system.OsConstants;
 import android.system.StructPollfd;
 import android.util.Log;
 import de.measite.minidns.DNSMessage;
+import de.measite.minidns.Question;
 import de.measite.minidns.Record;
 import de.measite.minidns.edns.EDNSOption;
 import de.measite.minidns.record.A;
 import de.measite.minidns.record.AAAA;
+import de.measite.minidns.source.NetworkDataSource;
+
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.service.DaedalusVpnService;
 import org.itxtech.daedalus.util.Logger;
@@ -29,6 +32,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 /**
  * Daedalus Project
@@ -321,10 +325,22 @@ public class UdpProvider extends Provider {
         byte[] dnsRawData = (parsedUdp).getPayload().getRawData();
         DNSMessage dnsMsg;
         try {
+//            Log.i(TAG, String.valueOf(dnsRawData));
             dnsMsg = new DNSMessage(dnsRawData);
-            if (Daedalus.getPrefs().getBoolean("settings_debug_output", false)) {
-                Logger.debug(dnsMsg.toString());
-            }
+            DNSMessage.Builder message = dnsMsg.asBuilder();
+            message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
+            message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
+            message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
+            message.getEdnsBuilder().setUdpPayloadSize(512);
+            message.addQuestion(new Question(dnsMsg.getQuestion().name.toString(), dnsMsg.getQuestion().type))
+                    .setId((new Random()).nextInt())
+                    .setRecursionDesired(true)
+                    .setOpcode(DNSMessage.OPCODE.QUERY)
+                    .setResponseCode(DNSMessage.RESPONSE_CODE.NO_ERROR)
+                    .setQrFlag(false);
+            dnsMsg = message.build();
+            Logger.debug(dnsMsg.toString());
+//            Logger.info("DNS Message:\n " + dnsMsg.asTerminalOutput());
         } catch (IOException e) {
             Log.i(TAG, "handleDnsRequest: Discarding non-DNS or invalid packet", e);
             return;
@@ -340,10 +356,10 @@ public class UdpProvider extends Provider {
             if (response != null && dnsMsg.getQuestion().type == Record.TYPE.A) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
-                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
-                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
-                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
-                builder.getEdnsBuilder().setUdpPayloadSize(512);
+//                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
+//                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
+//                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
+//                builder.getEdnsBuilder().setUdpPayloadSize(512);
                 builder.setQrFlag(true)
                         .addAnswer(new Record<>(dnsQueryName, Record.TYPE.A, 1, 64,
                                 new A(Inet4Address.getByName(response).getAddress())));
@@ -351,10 +367,10 @@ public class UdpProvider extends Provider {
             } else if (response != null && dnsMsg.getQuestion().type == Record.TYPE.AAAA) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
                 DNSMessage.Builder builder = dnsMsg.asBuilder();
-                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
-                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
-                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
-                builder.getEdnsBuilder().setUdpPayloadSize(512);
+//                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
+//                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
+//                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
+//                builder.getEdnsBuilder().setUdpPayloadSize(512);
                 builder.setQrFlag(true)
                         .addAnswer(new Record<>(dnsQueryName, Record.TYPE.AAAA, 1, 64,
                                 new AAAA(Inet6Address.getByName(response).getAddress())));

@@ -260,11 +260,15 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             Logger.info("Daedalus VPN service is listening on " + secondaryServer + " as " + secondaryDNSServer.getHostAddress());
             builder.addDnsServer(primaryDNSServer).addDnsServer(secondaryDNSServer);
 
-            if (advanced) {
-                builder.setBlocking(true);
-                builder.allowFamily(OsConstants.AF_INET);
-                builder.allowFamily(OsConstants.AF_INET6);
-            }
+//            if (advanced) {
+//                builder.setBlocking(true);
+//                builder.allowFamily(OsConstants.AF_INET);
+//                builder.allowFamily(OsConstants.AF_INET6);
+//            }
+
+            builder.setBlocking(true);
+            builder.allowFamily(OsConstants.AF_INET);
+            builder.allowFamily(OsConstants.AF_INET6);
 
             descriptor = builder.establish();
             Logger.info("Daedalus VPN service is started");

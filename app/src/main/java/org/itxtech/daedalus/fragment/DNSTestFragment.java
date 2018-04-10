@@ -172,11 +172,11 @@ public class DNSTestFragment extends ToolbarFragment {
                 try {
                     DNSMessage.Builder message = DNSMessage.builder();
 
-                    message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
-                    message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
-                    message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
-                    message.getEdnsBuilder().setUdpPayloadSize(512);
-
+//                    message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
+//                    message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
+//                    message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
+//                    message.getEdnsBuilder().setUdpPayloadSize(512);
+//
                     message.addQuestion(new Question(domain, type))
                             .setId((new Random()).nextInt())
                             .setRecursionDesired(true)
