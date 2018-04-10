@@ -325,22 +325,23 @@ public class UdpProvider extends Provider {
         byte[] dnsRawData = (parsedUdp).getPayload().getRawData();
         DNSMessage dnsMsg;
         try {
-//            Log.i(TAG, String.valueOf(dnsRawData));
+            Log.i(TAG, String.valueOf(dnsRawData));
             dnsMsg = new DNSMessage(dnsRawData);
             DNSMessage.Builder message = dnsMsg.asBuilder();
             message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
             message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
             message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
             message.getEdnsBuilder().setUdpPayloadSize(512);
-            message.addQuestion(new Question(dnsMsg.getQuestion().name.toString(), dnsMsg.getQuestion().type))
-                    .setId((new Random()).nextInt())
-                    .setRecursionDesired(true)
-                    .setOpcode(DNSMessage.OPCODE.QUERY)
-                    .setResponseCode(DNSMessage.RESPONSE_CODE.NO_ERROR)
-                    .setQrFlag(false);
+//            message.addQuestion(new Question(dnsMsg.getQuestion().name.toString(), dnsMsg.getQuestion().type))
+//                    .setId((new Random()).nextInt())
+//                    .setRecursionDesired(true)
+//                    .setOpcode(DNSMessage.OPCODE.QUERY)
+//                    .setResponseCode(DNSMessage.RESPONSE_CODE.NO_ERROR)
+//                    .setQrFlag(false);
             dnsMsg = message.build();
-            Logger.debug(dnsMsg.toString());
-//            Logger.info("DNS Message:\n " + dnsMsg.asTerminalOutput());
+            dnsRawData = dnsMsg.toArray();
+            DNSMessage myDNSMsg = new DNSMessage(dnsRawData);
+            Logger.debug(myDNSMsg.toString());
         } catch (IOException e) {
             Log.i(TAG, "handleDnsRequest: Discarding non-DNS or invalid packet", e);
             return;
