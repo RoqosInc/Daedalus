@@ -12,6 +12,7 @@ import android.widget.*;
 import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Question;
 import de.measite.minidns.Record;
+import de.measite.minidns.edns.EDNSOption;
 import de.measite.minidns.source.NetworkDataSource;
 import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
@@ -151,6 +152,15 @@ public class DNSTestFragment extends ToolbarFragment {
                 }
             }
 
+            public byte[] hexStringToByteArray(String s) {
+                int len = s.length();
+                byte[] data = new byte[len / 2];
+                for (int i = 0; i < len; i += 2) {
+                    data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                            + Character.digit(s.charAt(i+1), 16));
+                }
+                return data;
+            }
 
             private StringBuilder testServer(DNSQuery dnsQuery, Record.TYPE type, AbstractDNSServer server, String domain, StringBuilder testText) {
                 Logger.debug("Testing DNS server " + server.getAddress() + ":" + server.getPort());
@@ -160,8 +170,14 @@ public class DNSTestFragment extends ToolbarFragment {
 
                 boolean succ = false;
                 try {
-                    DNSMessage.Builder message = DNSMessage.builder()
-                            .addQuestion(new Question(domain, type))
+                    DNSMessage.Builder message = DNSMessage.builder();
+
+                    message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
+                    message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
+                    message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
+                    message.getEdnsBuilder().setUdpPayloadSize(512);
+
+                    message.addQuestion(new Question(domain, type))
                             .setId((new Random()).nextInt())
                             .setRecursionDesired(true)
                             .setOpcode(DNSMessage.OPCODE.QUERY)
