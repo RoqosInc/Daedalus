@@ -250,14 +250,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
 
             InetAddress aliasPrimary;
             InetAddress aliasSecondary;
-            if (advanced) {
-                dnsServers = new HashMap<>();
-                aliasPrimary = addDnsServer(builder, format, ipv6Template, InetAddress.getByName(primaryServer));
-                aliasSecondary = addDnsServer(builder, format, ipv6Template, InetAddress.getByName(secondaryServer));
-            } else {
-                aliasPrimary = InetAddress.getByName(primaryServer);
-                aliasSecondary = InetAddress.getByName(secondaryServer);
-            }
+            dnsServers = new HashMap<>();
+            aliasPrimary = addDnsServer(builder, format, ipv6Template, InetAddress.getByName(primaryServer));
+            aliasSecondary = addDnsServer(builder, format, ipv6Template, InetAddress.getByName(secondaryServer));
 
             InetAddress primaryDNSServer = aliasPrimary;
             InetAddress secondaryDNSServer = aliasSecondary;
@@ -274,20 +269,23 @@ public class DaedalusVpnService extends VpnService implements Runnable {
             descriptor = builder.establish();
             Logger.info("Daedalus VPN service is started");
 
-            if (advanced) {
-                if (Daedalus.getPrefs().getBoolean("settings_dns_over_tcp", false)) {
-                    provider = new TcpProvider(descriptor, this);
-                } else {
-                    provider = new UdpProvider(descriptor, this);
-                }
-                provider.start();
-                provider.process();
-            } else {
-                while (running) {
-                    Thread.sleep(1000);
-                }
-            }
-        } catch (InterruptedException ignored) {
+            provider = new UdpProvider(descriptor, this);
+            provider.start();
+            provider.process();
+
+//            if (advanced) {
+//                if (Daedalus.getPrefs().getBoolean("settings_dns_over_tcp", false)) {
+//                    provider = new TcpProvider(descriptor, this);
+//                } else {
+//                    provider = new UdpProvider(descriptor, this);
+//                }
+//                provider.start();
+//                provider.process();
+//            } else {
+//                while (running) {
+//                    Thread.sleep(1000);
+//                }
+//            }
         } catch (Exception e) {
             Logger.logException(e);
         } finally {

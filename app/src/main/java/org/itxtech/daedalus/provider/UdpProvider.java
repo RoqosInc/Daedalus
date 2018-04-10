@@ -10,6 +10,7 @@ import android.system.StructPollfd;
 import android.util.Log;
 import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Record;
+import de.measite.minidns.edns.EDNSOption;
 import de.measite.minidns.record.A;
 import de.measite.minidns.record.AAAA;
 import org.itxtech.daedalus.Daedalus;
@@ -261,6 +262,16 @@ public class UdpProvider extends Provider {
         queueDeviceWrite(ipOutPacket);
     }
 
+    public byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
+    }
+
     /**
      * Handles a DNS request, by either blocking it or forwarding it to the remote location.
      *
@@ -328,15 +339,23 @@ public class UdpProvider extends Provider {
             String response = RuleResolver.resolve(dnsQueryName, dnsMsg.getQuestion().type);
             if (response != null && dnsMsg.getQuestion().type == Record.TYPE.A) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
-                DNSMessage.Builder builder = dnsMsg.asBuilder()
-                        .setQrFlag(true)
+                DNSMessage.Builder builder = dnsMsg.asBuilder();
+                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
+                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
+                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
+                builder.getEdnsBuilder().setUdpPayloadSize(512);
+                builder.setQrFlag(true)
                         .addAnswer(new Record<>(dnsQueryName, Record.TYPE.A, 1, 64,
                                 new A(Inet4Address.getByName(response).getAddress())));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
             } else if (response != null && dnsMsg.getQuestion().type == Record.TYPE.AAAA) {
                 Logger.info("Provider: Resolved " + dnsQueryName + "  Local resolver response: " + response);
-                DNSMessage.Builder builder = dnsMsg.asBuilder()
-                        .setQrFlag(true)
+                DNSMessage.Builder builder = dnsMsg.asBuilder();
+                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
+                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
+                builder.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
+                builder.getEdnsBuilder().setUdpPayloadSize(512);
+                builder.setQrFlag(true)
                         .addAnswer(new Record<>(dnsQueryName, Record.TYPE.AAAA, 1, 64,
                                 new AAAA(Inet6Address.getByName(response).getAddress())));
                 handleDnsResponse(parsedPacket, builder.build().toArray());
