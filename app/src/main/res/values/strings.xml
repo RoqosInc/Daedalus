@@ -2,7 +2,10 @@
     <string name="app_name">Daedalus</string>
     <string name="quick_toggle">Toggle</string>
 
-    <string name="notice_main">See the world outside.</string>
+    <string name="edit_email">Email</string>
+    <string name="edit_password">Password</string>
+
+    <string name="notice_main">Login with Roqos.</string>
     <string name="notice_activated">iTXTech Daedalus is activated.</string>
     <string name="notice_start_test">Testing specified DNS server…</string>
     <string name="notice_queries">DNS query times:</string>
@@ -39,6 +42,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="button_text_activate">Activate</string>
+    <string name="button_text_activating">Activating...</string>
     <string name="button_text_deactivate">Deactivate</string>
 
     <string name="config_dns_server">DNS server config</string>

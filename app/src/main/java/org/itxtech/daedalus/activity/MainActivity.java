@@ -7,6 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.VpnService;
 import android.os.Bundle;
+
+import android.os.Build;
+import android.net.wifi.WifiManager;
+
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
+
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -136,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void activateService() {
+
         Intent intent = VpnService.prepare(Daedalus.getInstance());
         if (intent != null) {
             startActivityForResult(intent, 0);

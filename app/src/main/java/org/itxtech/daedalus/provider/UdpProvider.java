@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.system.Os;
 import android.system.OsConstants;
 import android.system.StructPollfd;
+import android.util.Base64;
 import android.util.Log;
 import de.measite.minidns.DNSMessage;
 import de.measite.minidns.Question;
@@ -276,6 +277,20 @@ public class UdpProvider extends Provider {
         return data;
     }
 
+    public byte[] macAddressToByteArray(String s) {
+        String macAddress =  s;
+        String[] macAddressParts = macAddress.split(":");
+
+        // convert hex string to byte values
+        byte[] macAddressBytes = new byte[6];
+        for(int i=0; i<6; i++) {
+            Integer hex = Integer.parseInt(macAddressParts[i], 16);
+            macAddressBytes[i] = hex.byteValue();
+        }
+
+        return Base64.encode(macAddressBytes, 0);
+    }
+
     /**
      * Handles a DNS request, by either blocking it or forwarding it to the remote location.
      *
@@ -325,23 +340,14 @@ public class UdpProvider extends Provider {
         byte[] dnsRawData = (parsedUdp).getPayload().getRawData();
         DNSMessage dnsMsg;
         try {
-            Log.i(TAG, String.valueOf(dnsRawData));
             dnsMsg = new DNSMessage(dnsRawData);
+            Log.i(TAG, "MacAddress: " + Daedalus.getMacAddress());
             DNSMessage.Builder message = dnsMsg.asBuilder();
-            message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, hexStringToByteArray("425041684a31535a")));
-            message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, hexStringToByteArray("356162313831633334376635313732663335636563666661")));
-            message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(8, hexStringToByteArray("0001200062bfd43c")));
+            message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65073, macAddressToByteArray(Daedalus.getMacAddress())));
+            message.getEdnsBuilder().addEdnsOption(EDNSOption.parse(65074, new String(Daedalus.getAccountId()).getBytes()));
             message.getEdnsBuilder().setUdpPayloadSize(512);
-//            message.addQuestion(new Question(dnsMsg.getQuestion().name.toString(), dnsMsg.getQuestion().type))
-//                    .setId((new Random()).nextInt())
-//                    .setRecursionDesired(true)
-//                    .setOpcode(DNSMessage.OPCODE.QUERY)
-//                    .setResponseCode(DNSMessage.RESPONSE_CODE.NO_ERROR)
-//                    .setQrFlag(false);
             dnsMsg = message.build();
             dnsRawData = dnsMsg.toArray();
-            DNSMessage myDNSMsg = new DNSMessage(dnsRawData);
-            Logger.debug(myDNSMsg.toString());
         } catch (IOException e) {
             Log.i(TAG, "handleDnsRequest: Discarding non-DNS or invalid packet", e);
             return;

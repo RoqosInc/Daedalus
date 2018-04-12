@@ -82,6 +82,10 @@ public class Daedalus extends Application {
     public static String logPath = null;
     private static String configPath = null;
 
+    public static String MacAddress = "02:00:00:00:00:00";
+    public static String AGWLink = "https://dev.roqos.com:443";
+    public static String AccountId = "";
+
     private static Daedalus instance = null;
     private SharedPreferences prefs;
     private Thread mResolver;
@@ -164,6 +168,22 @@ public class Daedalus extends Application {
                 RuleResolver.clear();
             }
         }
+    }
+
+    public static String getMacAddress(){
+        return MacAddress;
+    }
+
+    public static void setMacAddress(String str){
+        MacAddress = str;
+    }
+
+    public static String getAccountId(){
+        return AccountId;
+    }
+
+    public static void setAccountId(String str){
+        AccountId = str;
     }
 
     public static void setRulesChanged() {
