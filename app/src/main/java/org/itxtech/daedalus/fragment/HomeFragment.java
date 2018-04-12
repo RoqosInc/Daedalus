@@ -18,6 +18,7 @@ import org.itxtech.daedalus.Daedalus;
 import org.itxtech.daedalus.R;
 import org.itxtech.daedalus.activity.MainActivity;
 import org.itxtech.daedalus.service.DaedalusVpnService;
+import org.itxtech.daedalus.util.server.DNSServer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -33,6 +34,7 @@ import java.net.NetworkInterface;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -121,7 +123,11 @@ public class HomeFragment extends ToolbarFragment {
 
         Button but = view.findViewById(R.id.button_activate);
 
-        TextView errorText = view.findViewById(R.id.textView_errorMessage);
+        EditText agwText = view.findViewById(R.id.editView_AGW);
+        agwText.setText(Daedalus.AGWLink);
+
+        EditText dnsServer = view.findViewById(R.id.editView_dns);
+        dnsServer.setText(Daedalus.dnsServer);
 
         EditText email = view.findViewById(R.id.editView_login);
         EditText password = view.findViewById(R.id.editView_password);
@@ -144,6 +150,12 @@ public class HomeFragment extends ToolbarFragment {
                         TextView errorText1 = view.findViewById(R.id.textView_errorMessage);
                         errorText1.setText("");
                     });
+
+                    Daedalus.AGWLink = agwText.getText().toString();
+
+                    Daedalus.DNS_SERVERS = new ArrayList<DNSServer>() {{
+                        add(new DNSServer(dnsServer.getText().toString(), R.string.server_fundns_south_china));
+                    }};
 
                     OkHttpClient client = new OkHttpClient();
 

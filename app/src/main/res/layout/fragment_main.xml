@@ -83,4 +83,28 @@
         android:fontFamily="sans-serif"
         android:layout_alignTop="@+id/button_activate" android:layout_centerHorizontal="true"/>
 
+    <EditText
+        android:hint="@string/edit_agw_hint"
+        android:text="@string/edit_agw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editView_AGW"
+        app:layout_marginTopPercent="2%"
+        android:width="250dp"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+        android:fontFamily="sans-serif"
+        android:layout_below="@+id/textView_errorMessage" android:layout_centerHorizontal="false"/>
+
+    <EditText
+        android:hint="@string/edit_dns_hint"
+        android:text="@string/edit_dns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editView_dns"
+        app:layout_marginTopPercent="2%"
+        android:width="250dp"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+        android:fontFamily="sans-serif"
+        android:layout_below="@+id/editView_AGW" android:layout_centerHorizontal="false"/>
+
 </android.support.percent.PercentRelativeLayout>

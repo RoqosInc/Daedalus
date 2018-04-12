@@ -5,6 +5,12 @@
     <string name="edit_email">Email</string>
     <string name="edit_password">Password</string>
 
+    <string name="edit_agw_hint">AGW Server</string>
+    <string name="edit_agw"></string>
+
+    <string name="edit_dns_hint">DNS Server</string>
+    <string name="edit_dns"></string>
+
     <string name="notice_main">Login with Roqos.</string>
     <string name="notice_activated">iTXTech Daedalus is activated.</string>
     <string name="notice_start_test">Testing specified DNS server…</string>

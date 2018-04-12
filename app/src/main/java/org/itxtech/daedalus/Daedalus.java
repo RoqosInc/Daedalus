@@ -45,16 +45,6 @@ public class Daedalus extends Application {
 
     private static final String SHORTCUT_ID_ACTIVATE = "shortcut_activate";
 
-    public static final List<DNSServer> DNS_SERVERS = new ArrayList<DNSServer>() {{
-        add(new DNSServer("18.217.143.81", R.string.server_fundns_south_china));
-//        add(new DNSServer("119.23.248.241", R.string.server_fundns_south_china));
-//        add(new DNSServer("101.132.183.99", R.string.server_pdomo_primary));
-//        add(new DNSServer("193.112.15.186", R.string.server_pdomo_secondary));
-//        add(new DNSServer("115.159.146.99", R.string.server_aixyz_east_china));
-//        add(new DNSServer("123.206.21.48", R.string.server_aixyz_south_china));
-
-    }};
-
     public static final List<Rule> RULES = new ArrayList<Rule>() {{
         //Build-in Hosts rule providers
         add(new Rule("googlehosts/hosts", "googlehosts.hosts", Rule.TYPE_HOSTS,
@@ -84,7 +74,18 @@ public class Daedalus extends Application {
 
     public static String MacAddress = "02:00:00:00:00:00";
     public static String AGWLink = "https://dev.roqos.com:443";
+    public static String dnsServer = "18.217.143.81";
     public static String AccountId = "";
+
+    public static List<DNSServer> DNS_SERVERS = new ArrayList<DNSServer>() {{
+        add(new DNSServer(getDNSServer(), R.string.server_fundns_south_china));
+//        add(new DNSServer("119.23.248.241", R.string.server_fundns_south_china));
+//        add(new DNSServer("101.132.183.99", R.string.server_pdomo_primary));
+//        add(new DNSServer("193.112.15.186", R.string.server_pdomo_secondary));
+//        add(new DNSServer("115.159.146.99", R.string.server_aixyz_east_china));
+//        add(new DNSServer("123.206.21.48", R.string.server_aixyz_south_china));
+
+    }};
 
     private static Daedalus instance = null;
     private SharedPreferences prefs;
@@ -168,6 +169,10 @@ public class Daedalus extends Application {
                 RuleResolver.clear();
             }
         }
+    }
+
+    public static String getDNSServer(){
+        return dnsServer;
     }
 
     public static String getMacAddress(){
