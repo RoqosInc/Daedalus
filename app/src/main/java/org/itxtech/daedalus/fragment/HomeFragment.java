@@ -129,6 +129,9 @@ public class HomeFragment extends ToolbarFragment {
         EditText dnsServer = view.findViewById(R.id.editView_dns);
         dnsServer.setText(Daedalus.dnsServer);
 
+        EditText port = view.findViewById(R.id.editView_port);
+        port.setText(String.valueOf(Daedalus.port));
+
         EditText email = view.findViewById(R.id.editView_login);
         EditText password = view.findViewById(R.id.editView_password);
 
@@ -154,7 +157,7 @@ public class HomeFragment extends ToolbarFragment {
                     Daedalus.AGWLink = agwText.getText().toString();
 
                     Daedalus.DNS_SERVERS = new ArrayList<DNSServer>() {{
-                        add(new DNSServer(dnsServer.getText().toString(), R.string.server_fundns_south_china));
+                        add(new DNSServer(dnsServer.getText().toString(), R.string.server_fundns_south_china, Integer.parseInt(port.getText().toString())));
                     }};
 
                     OkHttpClient client = new OkHttpClient();

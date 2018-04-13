@@ -107,4 +107,16 @@
         android:fontFamily="sans-serif"
         android:layout_below="@+id/editView_AGW" android:layout_centerHorizontal="false"/>
 
+    <EditText
+        android:hint="@string/edit_port_hint"
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editView_port"
+        app:layout_marginTopPercent="2%"
+        android:width="250dp"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault"
+        android:fontFamily="sans-serif"
+        android:layout_below="@+id/editView_dns" android:layout_centerHorizontal="false"/>
+
 </android.support.percent.PercentRelativeLayout>

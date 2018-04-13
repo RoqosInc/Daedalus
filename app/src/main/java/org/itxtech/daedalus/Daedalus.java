@@ -75,10 +75,11 @@ public class Daedalus extends Application {
     public static String MacAddress = "02:00:00:00:00:00";
     public static String AGWLink = "https://dev.roqos.com:443";
     public static String dnsServer = "18.217.143.81";
+    public static int port = 53;
     public static String AccountId = "";
 
     public static List<DNSServer> DNS_SERVERS = new ArrayList<DNSServer>() {{
-        add(new DNSServer(getDNSServer(), R.string.server_fundns_south_china));
+        add(new DNSServer(getDNSServer(), R.string.server_fundns_south_china, getPort()));
 //        add(new DNSServer("119.23.248.241", R.string.server_fundns_south_china));
 //        add(new DNSServer("101.132.183.99", R.string.server_pdomo_primary));
 //        add(new DNSServer("193.112.15.186", R.string.server_pdomo_secondary));
@@ -169,6 +170,10 @@ public class Daedalus extends Application {
                 RuleResolver.clear();
             }
         }
+    }
+
+    public static int getPort(){
+        return port;
     }
 
     public static String getDNSServer(){
