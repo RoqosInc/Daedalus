@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.admin.DevicePolicyManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.VpnService;
@@ -69,9 +71,14 @@ public class DaedalusVpnService extends VpnService implements Runnable {
         return activated;
     }
 
+//    public static DevicePolicyManager mDPM;
+//    public static ComponentName devAdminReceiver;
+
     @Override
     public void onCreate() {
         super.onCreate();
+//        mDPM = (DevicePolicyManager)getSystemService(Context.DEVICE_POLICY_SERVICE);
+//        devAdminReceiver = new ComponentName(getApplicationContext(), DaedalusVpnService.class);
     }
 
     @Override
@@ -218,6 +225,9 @@ public class DaedalusVpnService extends VpnService implements Runnable {
                     .setConfigureIntent(PendingIntent.getActivity(this, 0,
                             new Intent(this, MainActivity.class).putExtra(MainActivity.LAUNCH_FRAGMENT, MainActivity.FRAGMENT_SETTINGS),
                             PendingIntent.FLAG_ONE_SHOT));
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+//                mDPM.setAlwaysOnVpnPackage(devAdminReceiver, "com.roqos.roqosapp", false);
+//            }
             String format = null;
             for (String prefix : new String[]{"10.0.0", "192.0.2", "198.51.100", "203.0.113", "192.168.50"}) {
                 try {

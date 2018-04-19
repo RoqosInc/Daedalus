@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "507896636190",
+    "firebase_url": "https://d-app-899de.firebaseio.com",
+    "project_id": "d-app-899de",
+    "storage_bucket": "d-app-899de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507896636190:android:51675184b44f9aaf",
+        "android_client_info": {
+          "package_name": "org.itxtech.daedalus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "507896636190-aef65u2csnb72dg8hpo1hm9i0iu29c2j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7ShQ9BeafWUply0SrRGL6sSgjqzY5IhI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
